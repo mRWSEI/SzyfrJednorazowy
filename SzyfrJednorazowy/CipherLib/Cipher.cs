@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("OTPCipherLibTest")]
 namespace CipherLib
 {
     public class OTPCipher
@@ -109,7 +112,7 @@ namespace CipherLib
         }
 
 
-        private char GetRandomLetter()
+        internal char GetRandomLetter()
         {
             Random rand = new Random(Guid.NewGuid().GetHashCode());
             short randomNumber = Convert.ToSByte(rand.Next(0, 25));
@@ -117,14 +120,20 @@ namespace CipherLib
             return Alphabet[randomNumber];
         }
 
-        private short GetLetterNumber(char letter)
+        internal short GetLetterNumber(char letter)
         {
             return Alphabet.Where(w => w.Value == letter).Select(s => s.Key).First();
         }
 
-        private char GetLetterByNumber(short number)
+        internal char GetLetterByNumber(short number)
         {
             return Alphabet.Where(w => w.Key == number).Select(s => s.Value).First();
+        }
+
+        internal string ReplaceAllNonAlphaChars(string textString)
+        {
+            Regex rgx = new Regex("[^a-zA-Z]");
+            return textString = rgx.Replace(textString, "");
         }
     }
 }
